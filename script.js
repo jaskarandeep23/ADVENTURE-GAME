@@ -1,4 +1,3 @@
-
 const story = {
   start: {
     text: "You are Kratos, the God of War. Your journey begins in Midgard. Where do you go?",
