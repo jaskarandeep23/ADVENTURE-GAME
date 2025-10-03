@@ -1,0 +1,74 @@
+# Debugging Analysis – Adventure Game
+
+This file documents three key breakpoints set in `script.js` using Chrome DevTools.  
+At each breakpoint, I captured the state of the program **before stepping** and **after stepping**.  
+Screenshots are stored in the `DEBUGGING_ANALYSIS/screenshots/` folder.
+
+---
+
+### Breakpoint 1: Setting new question
+- **Location**: Line in `renderState()` where `questionElement.textContent = state.text;`
+
+**Before:**
+(<Screenshot 2025-10-03 155931.png>)
+
+**After:**
+(<Screenshot 2025-10-03 153455-1.png>)
+
+
+**Explanation:**
+- Before stepping: `state.text` contains the new story text (e.g., `"In the forest, Draugr attack!"`), but the DOM (`questionElement.textContent`) still shows the old value.  
+- After stepping: The DOM updates, and the new text appears on screen for the player.
+
+**Critical Analysis:**  
+This line is essential because it ensures that the story text on the screen matches the current state of the game. Without it, the player would not see the updated adventure. Debugging confirms the logic works correctly.
+
+---
+
+
+### Breakpoint 2: Clearing old buttons
+- **Location**: Line in `renderState()` where `answersElement.innerHTML = "";`
+
+**Before:**
+(<Screenshot 2025-10-03 160150.png>)
+
+
+**After:**
+(<Screenshot 2025-10-03 155310.png>)
+
+
+**Explanation:**
+- Before stepping: The old choice buttons (e.g., “🌲 Enter the Forest”) are still in the DOM.  
+- After stepping: The `answersElement` container is cleared, removing old buttons and making space for the new set of choices.
+
+**Critical Analysis:**  
+This ensures that players only see the valid options for their current state. If this step failed, old and new buttons would overlap, breaking the flow of the game.
+
+---
+
+
+### Breakpoint 3: Handling button click
+- **Location**: Inside the `button.addEventListener("click", ...)` callback in `renderState()`.
+
+**Before:**
+(<Screenshot 2025-10-03 160413.png>)
+
+**After:**
+(<Screenshot 2025-10-03 155344.png>)
+
+**Explanation:**
+- Before stepping: The debugger is paused when a choice button is clicked. At this point, `choice.next` (e.g., `"forest1"`) is visible and ready to be passed into `renderState()`.  
+- After stepping: The `renderState(choice.next)` call executes, updating the DOM to show the next part of the story and new buttons.
+
+**Critical Analysis:**  
+This breakpoint verifies the **interaction flow**. Each button correctly calls `renderState()` with the right next state. If this failed, clicking a button would not progress the story. Debugging shows that the event listener is wired correctly and game navigation works.
+
+---
+
+## Conclusion
+By setting these three breakpoints, I confirmed that:
+1. Story text updates correctly.  
+2. Old buttons are removed before new ones are added.  
+3. Button clicks correctly trigger state changes.  
+
+This analysis demonstrates how the game logic flows step by step and confirms that DOM updates and event handling work as intended.
